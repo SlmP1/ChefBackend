@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
-const ingredientRouter = require('./routes/ingredient');
+const recipeRouter = require('./routes/recipe'); // <-- new recipe router
 
 const app = express();
 app.use(express.json());
@@ -13,8 +13,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error('MongoDB error:', err));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use('/recipe', ingredientRouter);
+app.use('/recipe', recipeRouter);
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server at http://localhost:${process.env.PORT || 3000}`);
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
