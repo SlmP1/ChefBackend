@@ -8,7 +8,7 @@ const options = {
       version: '1.0.0',
       description: 'API for managing recipes and ingredients',
     },
-    servers: [{ url: 'http://localhost:3000' }],
+    servers: [{ url: '/' }],
   },
   apis: ['./routes/*.js'], // scans JSDoc comments in route files
 };

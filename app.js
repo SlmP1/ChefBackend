@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 const recipeRouter = require('./routes/recipe'); // <-- new recipe router
+const ingredientRouter = require('./routes/ingredient');
 
 const app = express();
 app.use(express.json());
@@ -14,6 +15,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/recipe', recipeRouter);
+app.use('/recipe', ingredientRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
