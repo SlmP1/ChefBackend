@@ -1,12 +1,14 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
-const recipeRouter = require('./routes/recipe'); // <-- new recipe router
+const recipeRouter = require('./routes/recipe');
 const ingredientRouter = require('./routes/ingredient');
 
 const app = express();
+app.use(cors()); // allows all origins
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI)
