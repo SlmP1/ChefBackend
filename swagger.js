@@ -10,7 +10,11 @@ const options = {
     },
     servers: [{ url: '/' }],
   },
-  apis: ['./routes/*.js'], // scans JSDoc comments in route files
+ 
+  apis: ['./routes/*.js', './models/*.js'], // make sure models/Recipe.js is scanned if you put JSDoc there
+  
 };
+
+
 
 module.exports = swaggerJsdoc(options);

@@ -100,4 +100,65 @@ router.post('/generate', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /recipe/recipes:
+ *   get:
+ *     summary: Get all saved recipes from database
+ *     tags: [Recipes]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *         description: Number of recipes to return
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           enum: [newest, oldest]
+ *           default: newest
+ *         description: Sort by creation date (newest/oldest)
+ *     responses:
+ *       200:
+ *         description: List of saved recipes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Recipe'  # თუ გაქვს swagger schema
+ *       500:
+ *         description: Server error
+ */
+router.get('/recipes', async (req, res) => {
+  try {
+    const { limit = 20, sort = 'newest' } = req.query;
+
+   
+    const limitNum = parseInt(limit, 10);
+    if (isNaN(limitNum) || limitNum < 1) {
+      return res.status(400).json({ error: 'Invalid limit value' });
+    }
+
+    
+    const sortOption = sort === 'oldest' ? { createdAt: 1 } : { createdAt: -1 };
+
+    const recipes = await Recipe.find()
+      .sort(sortOption)              
+      .limit(limitNum)               
+      .lean();                       
+
+    res.status(200).json(recipes);
+
+  } catch (err) {
+    console.error('Error fetching recipes:', err);
+    res.status(500).json({
+      error: 'Failed to fetch saved recipes',
+      details: err.message,
+    });
+  }
+}); 
+
 module.exports = router;
