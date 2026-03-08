@@ -161,4 +161,52 @@ router.get('/recipes', async (req, res) => {
   }
 }); 
 
+
+
+/**
+ * @swagger
+ * /recipe/recipes/{externalId}:
+ *   delete:
+ *     summary: Delete a saved recipe by its externalId
+ *     tags: [Recipes]
+ *     parameters:
+ *       - in: path
+ *         name: externalId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The external ID of the recipe to delete
+ *     responses:
+ *       200:
+ *         description: Recipe deleted successfully
+ *       404:
+ *         description: Recipe not found
+ *       500:
+ *         description: Server error
+ */
+router.delete('/recipes/:externalId', async (req, res) => {
+  try {
+    const { externalId } = req.params;
+
+    const result = await Recipe.deleteOne({ externalId });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: 'Recipe not found' });
+    }
+
+    res.status(200).json({
+      message: 'Recipe deleted successfully',
+      deletedCount: result.deletedCount,
+    });
+
+  } catch (err) {
+    console.error('Error deleting recipe:', err);
+    res.status(500).json({
+      error: 'Failed to delete recipe',
+      details: err.message,
+    });
+  }
+});
+
 module.exports = router;
+
