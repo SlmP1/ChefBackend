@@ -9,12 +9,20 @@ const options = {
       description: 'API for managing recipes and ingredients',
     },
     servers: [{ url: '/' }],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: 'Enter your JWT access token (obtained from /auth/login or /auth/register)',
+        },
+      },
+    },
+    // Apply globally - remove if you want per-route control only
+    security: [{ bearerAuth: [] }],
   },
- 
-  apis: ['./routes/*.js', './models/*.js'], // make sure models/Recipe.js is scanned if you put JSDoc there
-  
+  apis: ['./routes/*.js', './models/*.js'],
 };
-
-
 
 module.exports = swaggerJsdoc(options);
