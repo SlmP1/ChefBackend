@@ -3,7 +3,7 @@ const axios = require('axios');
 const router = express.Router();
 
 const Recipe = require('../models/Recipe'); 
-
+const { protect } = require('../middleware/auth');
 /**
  * @swagger
  * /recipe/generate:
@@ -30,7 +30,7 @@ const Recipe = require('../models/Recipe');
  *       500:
  *         description: Server / webhook error
  */
-router.post('/generate', async (req, res) => {
+router.post('/generate', protect, async (req, res) => {
   try {
     const { ingredients } = req.body;
 
@@ -132,7 +132,7 @@ router.post('/generate', async (req, res) => {
  *       500:
  *         description: Server error
  */
-router.get('/recipes', async (req, res) => {
+router.get('/recipes', protect, async (req, res) => {
   try {
     const { limit = 20, sort = 'newest' } = req.query;
 
@@ -184,7 +184,7 @@ router.get('/recipes', async (req, res) => {
  *       500:
  *         description: Server error
  */
-router.delete('/recipes/:externalId', async (req, res) => {
+router.delete('/recipes/:externalId', protect, async (req, res) => {
   try {
     const { externalId } = req.params;
 
