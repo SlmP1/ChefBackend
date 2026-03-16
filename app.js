@@ -10,7 +10,12 @@ const authRoutes = require('./routes/auth');
 const { protect } = require('./middleware/auth');
 
 const app = express();
-app.use(cors()); // allows all origins
+app.use(cors({                                                                                                                                                                     
+origin: function(origin, callback) {                                                                                                                                                                                                                                                                                                                                              
+ callback(null, origin || true);                                                                                                                                                
+  },                                                                                                                                                                               
+credentials: true                                                                                                                                                              
+ })); // allows all origins
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI)
